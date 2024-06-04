@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }) {
     "Sports",
     "Technology",
   ];
-  const [selectedCategory, setSelectedCategory] = useState("Business");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,6 +37,7 @@ export default function HomeScreen({ navigation }) {
     }
 
     try {
+      setLoading(true);
       const response = await axios.get(url);
       setNews(response.data.articles);
       setError(null);

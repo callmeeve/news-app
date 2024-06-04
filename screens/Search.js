@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
+import { debounce } from "lodash";
 
 export default function SearchScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,11 +17,11 @@ export default function SearchScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const searchNews = async () => {
+  const searchNews = useCallback(debounce(async (query) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=4fed107c988f4d38ab91e6c2901cc907`
+        `https://newsapi.org/v2/everything?q=${query}&apiKey=4fed107c988f4d38ab91e6c2901cc907`
       );
       const data = await response.json();
       setSearchResults(data.articles);
@@ -29,12 +30,14 @@ export default function SearchScreen({ navigation }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, 500), []); // Debounce the search request by 500ms
 
   useEffect(() => {
-    searchNews();
-  }, [searchQuery]);
-
+    if (searchQuery) {
+      searchNews(searchQuery);
+    }
+  }, [searchQuery, searchNews]);
+  
   return (
     <View style={styles.container}>
       <TextInput
