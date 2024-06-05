@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Linking } from "react-native";
+import { Button } from "react-native-paper";
 
 export default function NewsDetailScreen({ route }) {
   const { news } = route.params;
@@ -14,6 +15,9 @@ export default function NewsDetailScreen({ route }) {
       </View>
       <Text style={styles.newsDescription}>{news.description}</Text>
       <Text style={styles.newsContent}>{news.content}</Text>
+      <Button color="#fff" style={styles.newsButton} onPress={() => Linking.openURL(news.url)}>
+        Read More
+      </Button>
     </View>
   );
 }
@@ -26,7 +30,7 @@ const styles = StyleSheet.create({
   },
   newsImage: {
     width: "100%",
-    height: 200,
+    height: 300,
     borderRadius: 5,
     marginBottom: 10,
   },
@@ -52,4 +56,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 14,
   },
+  newsButton : {
+    marginTop: 20,
+    padding: 5,
+    borderRadius: 5,
+    backgroundColor: "#000",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  }
 });
